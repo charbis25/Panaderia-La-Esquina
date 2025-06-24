@@ -1,0 +1,113 @@
+.formulario-facturacion {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	align-items: center;
+	
+	margin: 6rem auto 0 auto;
+	gap: 3rem;
+	max-width: 70rem;
+	padding: 0 6%;
+}
+
+.formulario-facturacion .campo {
+	max-width: 70rem;
+	width: 100%;
+	-moz-appearance: textfield;
+}
+
+@media screen and (min-width: 768px) {
+	.formulario-facturacion .campo[name="nombre"], .formulario-facturacion .campo[name="apellido"] {
+		flex: 1 1 30%;
+		max-width: 85%;
+	}
+}
+
+.pedido-facturacion .productos {
+	display: flex;
+	flex-flow: column nowrap;
+	
+	width: 100%;
+}
+
+.pedido-facturacion .productos .producto {
+	background-color: var(--color-suave);
+	width: 100%;
+	margin: 0;
+	padding: 0 1.2rem;
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-between;
+	align-items: center;
+}
+.pedido-facturacion .productos .producto:nth-child(even) {
+	background-color: var(--color-suave-2);
+}
+
+.pedido-facturacion .productos .producto {
+	border-radius: 0rem;
+}
+.pedido-facturacion .productos .producto h3 {
+	color: var(--color-primario);
+	font-size: 3rem;
+	word-wrap: normal;
+	line-height: 4.4rem;
+	
+	flex: 1 1 60%;
+}
+.pedido-facturacion .productos .producto .cantidad {
+	font-size: 2.6rem;
+	flex: 1 1 10%;
+	text-align: center;
+}
+.pedido-facturacion .productos .producto .cantidad span {
+	font-weight: bold;
+}
+.pedido-facturacion .productos .producto .subtotal {
+	font-size: 2.8rem;
+	font-weight: bold;
+	flex: 1 1 10%;
+	text-align: center;
+}
+
+.pedido-facturacion .total {
+	background-color: var(--color-enfoque);
+	width: 100%;
+	padding: 0 1.2rem;
+	color: var(--color-blanco);
+	
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-between;
+	align-items: center;
+	
+	font-size: 3.2rem;
+	font-weight: bold;
+}
+
+.pedido-facturacion .boton-paypal-contenedor {
+	margin: 3rem auto;
+	display: block;
+	max-width: 100%;
+	text-align: center;
+}
+
+@media screen and (min-width: 1025px) {
+	.contenedor-facturacion {
+		display: flex;
+		flex-flow: row nowrap;
+	}
+	
+	.formulario-facturacion, .pedido-facturacion {
+		margin-top: 2rem;
+	}
+	
+	.pedido-facturacion .productos .producto .cantidad {
+		flex: 1 1 20%;
+		margin: 0 1rem;
+	}
+	
+	.pedido-facturacion .boton {
+		padding: 2rem 4rem;
+	}
+}

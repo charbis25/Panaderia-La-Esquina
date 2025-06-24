@@ -1,0 +1,4 @@
+canizaresrobert18
+dRTqnvAWiSQCBcKE
+mongodb://atlas-sql-684a18a62e9e822e6091e88a-aghhzc.a.query.mongodb.net/sample_mflix?ssl=true&authSource=admin
+mongodb://atlas-sql-684a18a62e9e822e6091e88a-aghhzc.a.query.mongodb.net/sample_mflix?ssl=true&authSource=admin

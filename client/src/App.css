@@ -1,0 +1,202 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&family=Satisfy&display=swap');
+
+/** ################## GLOBALES ################## */
+
+
+:root {
+	--color-primario: #E78748;
+	--color-primario-oscuro: #CA7945;
+	--color-primario-realce: #C0682F;
+	--color-blanco: #FFF7F0;
+	--color-blanco-hover: #E6D5C6;
+	--color-oscuro: #402E32;
+	--color-form-gris-claro: #9F9F9F;
+	--color-form-gris-oscuro: #838383;
+	--color-exito: #007e33;
+	--color-advertencia: #DA4032;
+	--color-advertencia-hover: #B84136;
+	
+	--color-suave: #FAE6D9;
+	--color-suave-realce: #F5CEB5;
+	--color-enfoque: #C0682F;
+	
+	--color-suave-2: #EAD5C8;
+	--color-realce-desktop: #F5CEB5;
+	--color-realce-desktop2: #E7BFA5;
+	--color-enfoque-desktop: #C67744;
+	--color-realce-enfoque-desktop: #C0682F;
+
+	--fuente-principal: "Comfortaa", Verdana, sans-serif;
+	--fuente-cursiva: "Satisfy", "Lucida Handwriting", cursive;
+}
+
+*, *:before, *:after { 
+	box-sizing: border-box; 
+}
+
+
+html {
+	font-size: 62.5%;
+}
+
+body {
+	background-color: var(--color-blanco);
+	font-family: var(--fuente-principal);
+}
+
+div.app {
+	min-height: 100vh;
+	margin: 0;
+	display: flex;
+	flex-flow: row wrap;
+}
+
+*::selection {
+	background-color: #afafaf9b;
+}
+/** ################## UTILIDADES ################## */
+.seccion {
+	max-width: 1200px;
+	flex-basis: 1200px;
+	margin: 0 auto;
+}
+.seccion h1 {
+	color: var(--color-primario);
+	text-align: center;
+	font-size: 3.6rem;
+	margin: 2.4rem 0;
+}
+@media screen and (min-width: 768px) {
+	.seccion h1 {font-size: 4.2rem;}
+}
+.seccion.tamano-completo {
+	max-width: none;
+	flex: 100% 1 0;
+}
+
+*[data-transicion] {
+	opacity: 0;
+	animation: transicion 0.5s ease-in-out;
+	animation-fill-mode: forwards;
+}
+@keyframes transicion {
+	from {opacity: 0;}
+	to {opacity: 1;}
+}
+
+.select {
+	-webkit-user-select: unset;
+	-moz-user-select: unset;
+	-ms-user-select: unset;
+	user-select: unset;
+}
+.no-select {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.boton {
+	color: var(--color-blanco);
+	background-color: var(--color-primario);
+	font-family: var(--fuente-principal);
+	font-weight: bold;
+	text-decoration: none;
+	text-align: center;
+	cursor: pointer;
+	border: none;
+	border-radius: 15px;
+	padding: 1rem;
+}
+.boton:focus, .boton:hover, .boton:active {
+	background-color: var(--color-primario-realce);
+}
+.boton.hueco {
+	background-color: rgba(0, 0, 0, 0);
+	border: solid 4px var(--color-primario);
+	color: var(--color-primario);
+}
+.boton.hueco:focus, .boton.hueco:hover, .boton.hueco:active {
+	border: solid 4px var(--color-primario-realce);
+	color: var(--color-primario-realce);
+}
+
+.operacion-invalida {
+	text-align: center;
+	align-self: center;
+	height: 100%;
+	margin: 0 3rem;
+}
+.operacion-invalida h2 {
+	font-size: 7rem;
+	color: var(--color-primario-oscuro);
+	font-weight: bold;
+}
+.operacion-invalida h3 {
+	font-size: 3.8rem;
+	color: var(--color-primario);
+}
+.operacion-invalida h4 {
+	font-size: 3rem;
+	color: #6d6d6d;
+}
+.operacion-invalida a {
+	text-decoration: underline;
+	color: var(--color-primario-oscuro);
+	white-space: nowrap;
+}
+.operacion-invalida a:hover, .operacion-invalida a:active {
+	text-decoration: underline;
+	color: var(--color-primario-realce);
+}
+
+.mensaje-info {
+	color: var(--color-blanco);
+	font-family: var(--fuente-principal);
+	font-size: 2.6rem;
+	font-weight: bold;
+	text-align: center;
+	border-radius: 10px;
+	padding: 1rem;
+	margin: 1.5rem auto;
+	width: 85%;
+	max-width: 1200px;
+}
+.mensaje-info.error {background-color: var(--color-advertencia);}
+.mensaje-info.principal {background-color: var(--color-primario);}
+.mensaje-info.exito {background-color: var(--color-exito);}
+
+/** ################## FORMULARIOS ################## */
+
+.campo {
+	background-color: rgba(0, 0, 0, 0);
+	color: var(--color-form-gris-oscuro);
+	font-size: 2.8rem;
+	font-weight: bold;
+	border: none;
+	border-bottom: solid 3px var(--color-form-gris-claro);
+	
+	margin-bottom: 5rem;
+}
+.campo::selection {
+	background-color: #cecece;
+	color: #616161;
+}
+.campo:focus {
+	outline: none;
+	border-color: var(--color-form-gris-oscuro);
+	color: var(--color-form-gris-oscuro);
+}
+.campo::placeholder {
+	color: var(--color-form-gris-claro);
+}
+.campo:focus::placeholder {
+	color: var(--color-form-gris-oscuro);
+}
+
+@media screen and (min-width: 768px) {
+	.campo {
+		font-size: 3.2rem;
+	}
+}

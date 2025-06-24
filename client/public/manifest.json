@@ -1,0 +1,27 @@
+{
+	"name": "Panadería La Esquina",
+	"short_name": "La Esquina",
+	"icons": [
+		{
+			"src": "favicon.ico",
+			"sizes": "64x64 32x32 24x24 16x16",
+			"type": "image/x-icon"
+		},
+		{
+			"src": "logo192.png",
+			"type": "image/png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "logo512.png",
+			"type": "image/png",
+			"sizes": "512x512"
+		}
+	],
+	"categories": ["business", "food", "pastry"],
+	"display": "browser",
+	"theme_color": "#C0682F",
+	"background_color": "#FFF7F0",
+	"dir": "ltr",
+	"lang": "es-AR"
+}

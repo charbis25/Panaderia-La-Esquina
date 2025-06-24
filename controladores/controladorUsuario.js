@@ -1,0 +1,144 @@
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const Usuario = require("../modelos/modeloUsuario");
+
+const controladorUsuario = {
+	registro: async(req, res) => {
+		try {
+			console.log('--- Intentando registrar usuario ---');
+			console.log('Body recibido:', req.body);
+			const {nombre, apellido, email, contrasena} = req.body;
+
+			//? verificacion usuario no existe
+			const usuarioExiste = await Usuario.findOne({email});
+			if(usuarioExiste) {
+				console.log('Correo ya registrado:', email);
+				return res.status(409).end(); //409: Conflict.
+			}
+
+			//? verificacion contrasena es adecuada
+			if(!contrasena || contrasena.length < 6) {
+				console.log('Contraseña demasiado corta o vacía');
+				return res.status(422).end(); //422: Unprocessable Entity
+			}
+
+			//* Encriptado de contrasena
+			const hashContrasena = await bcrypt.hash(contrasena, 10);
+			const nuevoUsuario = new Usuario({
+				nombre, apellido, email, contrasena: hashContrasena
+			});
+
+			//* Guardar en la BBDD
+			await nuevoUsuario.save();
+			console.log('Usuario registrado correctamente:', email);
+
+			//* Crear tokens de autenticacion
+			const tokenAcceso = crearTokenAcceso({id: nuevoUsuario._id});
+			const tokenReacceso = crearTokenReacceso({id: nuevoUsuario._id});
+
+			//* Activar cookie con el token de reacceso
+			res.cookie('tokenReacceso', tokenReacceso, {
+				httpOnly: true,
+				path: '/api/usuario/tokenReacceso',
+				maxAge: 7*24*60*60*1000 //# 7 dias
+			});
+
+			return res.status(200).json({tokenAcceso});
+
+		} catch (err) {
+			console.error('Error en registro:', err);
+			return res.status(500).json({mensajeError: err.message})
+		}
+	},
+	iniciarSesion: async(req, res) => {
+		try {
+			const {email, contrasena} = req.body;
+			//? verificacion usuario existe
+			const usuarioLogin = await Usuario.findOne({email});
+			if(!usuarioLogin) return res.status(404).end(); //404: Not Found
+
+			//? verificacion contrasena correcta
+			const contrasenaEsCorrecta = await bcrypt.compare(contrasena, usuarioLogin.contrasena);
+			if(!contrasenaEsCorrecta) return res.status(401).end(); //401: Unauthorized
+
+			//* Crear tokens de autenticacion
+			const tokenAcceso = crearTokenAcceso({id: usuarioLogin._id});
+			const tokenReacceso = crearTokenReacceso({id: usuarioLogin._id});
+
+			//* Activar cookie con el token de reacceso
+			res.cookie('tokenReacceso', tokenReacceso, {
+				httpOnly: true,
+				path: '/api/usuario/tokenReacceso',
+				maxAge: 7*24*60*60*1000 //# 7 dias
+			});
+
+			return res.status(200).json({tokenAcceso});
+
+		} catch (error) {
+			return res.status(500).json({mensajeError: error.message});
+		}
+	},
+	cerrarSesion: async(req, res) => {
+		try {
+			//* Elimina la cookie
+			res.clearCookie('tokenReacceso', {path: '/api/usuario/tokenReacceso'});
+			return res.status(200).end();
+		} catch (error) {
+			return res.status(500).json({mensajeError: error.message});
+		}
+	},
+	tokenReacceso: async(req, res) => {
+		try {
+			//? verificacion cookie activada
+			const cookieReacceso = req.cookies.tokenReacceso;
+			if(!cookieReacceso) return res.status(401).end(); //401: Unauthorized
+
+			//* creacion tokenAcceso
+			//? y verificacion token genuino
+			const tokenAcceso = jwt.verify(cookieReacceso, process.env.SECRETO_TOKEN_REACCESO, (error, usuario) =>{
+                if(error) return res.status(401).end(); //401: Unauthorized
+                return crearTokenAcceso({id: usuario.id});
+            });
+			return res.status(200).json({tokenAcceso});
+		} catch (error) {
+			return res.status(500).json({mensajeError: error.message});
+		}
+	},
+	obtenerUsuario: async(req, res) => {
+		try {
+			//* obtencion datos del usuario
+			//? y verificacion usuario existe
+			const usuario = await Usuario.findById(req.usuario.id).select("-contrasena");
+			if(!usuario) return res.status(404).end(); //404: Not Found
+
+			return res.status(200).json({usuario});
+		} catch (error) {
+			return res.status(500).json({mensajeError: error.message});
+		}
+	},
+	modificarCarrito: async(req, res) => {
+		try {
+			//? verificacion usuario existe
+			const usuario = await Usuario.findById(req.usuario.id).select("-contrasena");
+			if(!usuario) return res.status(404).end(); //404: Not Found
+
+			const {carrito} = req.body;
+			usuario.carrito = carrito;
+			await usuario.save();
+
+			return res.status(200).json({carrito});
+		} catch (error) {
+			return res.status(500).json({mensajeError: error.message});
+		}
+	}
+}
+
+const crearTokenAcceso = (idUsuario) =>{
+    return jwt.sign(idUsuario, process.env.SECRETO_TOKEN_ACCESO, {expiresIn: '11m'})
+}
+const crearTokenReacceso = (idUsuario) =>{
+    return jwt.sign(idUsuario, process.env.SECRETO_TOKEN_REACCESO, {expiresIn: '7d'})
+}
+
+module.exports = controladorUsuario;
